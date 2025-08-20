@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJ Fresh Store - Style Premium</title>
+    <meta name="description" content="Découvrez notre collection premium de vêtements pour hommes et femmes. Nouveautés, tendances et exclusivités.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        primary: '#1a1a1a',
+                        secondary: '#f5f5f5',
+                        accent: '#d4af37',
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 1s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.6s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Anime.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        /* Custom CSS for clip-path and animations */
+        .clip-circle {
+            clip-path: circle(0% at 50% 50%);
+            will-change: clip-path;
+        }
+        
+        .clip-circle-animated {
+            animation: clipCircleReveal 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+        
+        @keyframes clipCircleReveal {
+            0% { clip-path: circle(0% at 50% 50%); }
+            100% { clip-path: circle(75%); }
+        }
+        
+        .clip-polygon {
+            clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+            will-change: clip-path;
+        }
+        
+        .clip-polygon-animated {
+            animation: clipPolygonReveal 1s ease-out forwards;
+        }
+        
+        @keyframes clipPolygonReveal {
+            0% { clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+        }
+        
+        .scroll-fade {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .scroll-fade.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Product card hover effect */
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Sticky header */
+        .sticky-header {
+            transition: all 0.3s ease;
+        }
+        
+        .sticky-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Mobile menu animation */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        
+        .mobile-menu.open {
+            max-height: 100vh;
+        }
+    </style>
+</head>
+<body class="font-sans text-primary bg-light antialiased">
+    <!-- Sticky Header -->
+    <header class="sticky-header fixed top-0 left-0 w-full z-50 bg-white py-4">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-serif font-bold text-accent"><img src="logomj.jpeg" width="45px" height="30px" alt=""></a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="font-medium hover:text-accent transition">Accueil</a>
+                    <a href="#" class="font-medium hover:text-accent transition">À propos</a>
+                    <div class="relative group">
+                        <button class="font-medium hover:text-accent transition flex items-center">
+                            Boutique <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
+                            <a href="#" class="block px-4 py-2 hover:bg-secondary">Hommes</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-secondary">Femmes</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-secondary">Marques</a>
+                        </div>
+                    </div>
+                    <a href="#" class="font-medium hover:text-accent transition">Nouveautés</a>
+                    <a href="#" class="font-medium hover:text-accent transition">Services</a>
+                    <a href="#" class="font-medium hover:text-accent transition">Témoignages</a>
+                    <a href="#" class="font-medium hover:text-accent transition">Blog</a>
+                    <a href="#" class="font-medium hover:text-accent transition">Contact</a>
+                </nav>
+                
+                <!-- Icons -->
+                <div class="flex items-center space-x-4">
+                    <button class="hover:text-accent transition"><i class="fas fa-search"></i></button>
+                    <button class="hover:text-accent transition"><i class="fas fa-heart"></i></button>
+                    <button class="hover:text-accent transition"><i class="fas fa-user"></i></button>
+                    <button class="hover:text-accent transition relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="absolute -top-2 -right-2 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button" class="md:hidden text-primary">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden bg-white">
+                <div class="px-2 pt-2 pb-4 space-y-1">
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Accueil</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">À propos</a>
+                    <div>
+                        <button class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-secondary flex items-center justify-between">
+                            Boutique <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="pl-4">
+                            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Hommes</a>
+                            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Femmes</a>
+                            <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Marques</a>
+                        </div>
+                    </div>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Nouveautés</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Services</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Témoignages</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Blog</a>
+                    <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-secondary">Contact</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Scroll Animation -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                 alt="Fashion model" 
+                 class="w-full h-full object-cover clip-circle">
+        </div>
+        
+        <div class="hero-overlay absolute inset-0"></div>
+        
+        <div class="container mx-auto px-4 relative z-10 text-center text-white scroll-fade">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold mb-4 animate-slide-up">Nouvelle fraîcheur en stock <span class="text-accent">🌬️</span></h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">"Sil pa fre, li pa nou découvre ton style dès maintenant"</p>
+            <button class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105">
+                Découvrir la boutique
+            </button>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-white text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Breadcrumb -->
+    <section class="bg-secondary py-4">
+        <div class="container mx-auto px-4">
+            <nav class="scroll-fade">
+                <ol class="flex items-center space-x-2 text-sm">
+                    <li><a href="#" class="hover:text-accent">Accueil</a></li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li><a href="#" class="hover:text-accent">Boutique</a></li>
+                    <li><i class="fas fa-chevron-right text-xs"></i></li>
+                    <li class="text-accent">Hommes</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Filter & Sort Section -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 scroll-fade">
+                <h2 class="text-2xl font-serif font-bold mb-4 md:mb-0">Nos produits</h2>
+                
+                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
+                    <!-- Mobile filter button -->
+                    <button class="md:hidden flex items-center justify-between bg-primary text-white px-4 py-2 rounded">
+                        <span>Filtres</span>
+                        <i class="fas fa-sliders-h ml-2"></i>
+                    </button>
+                    
+                    <!-- Sort dropdown -->
+                    <div class="relative">
+                        <select class="appearance-none bg-secondary border-0 pl-4 pr-8 py-2 rounded focus:outline-none focus:ring-2 focus:ring-accent">
+                            <option>Trier par : Le plus récent</option>
+                            <option>Meilleures ventes</option>
+                            <option>Moins cher</option>
+                            <option>Plus cher</option>
+                        </select>
+                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row scroll-fade">
+                <!-- Filters sidebar -->
+                <aside class="hidden md:block w-full md:w-64 flex-shrink-0 mr-8">
+                    <div class="bg-secondary p-6 rounded-lg sticky top-32">
+                        <h3 class="font-bold mb-4">Filtres</h3>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-medium mb-2">Catégories</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-accent">Chemises</a></li>
+                                <li><a href="#" class="hover:text-accent">Pantalons</a></li>
+                                <li><a href="#" class="hover:text-accent">T-Shirts</a></li>
+                                <li><a href="#" class="hover:text-accent">Vestes</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-medium mb-2">Tailles</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="w-10 h-10 flex items-center justify-center border hover:bg-primary hover:text-white rounded">XS</button>
+                                <button class="w-10 h-10 flex items-center justify-center border hover:bg-primary hover:text-white rounded">S</button>
+                                <button class="w-10 h-10 flex items-center justify-center border hover:bg-primary hover:text-white rounded">M</button>
+                                <button class="w-10 h-10 flex items-center justify-center border hover:bg-primary hover:text-white rounded">L</button>
+                                <button class="w-10 h-10 flex items-center justify-center border hover:bg-primary hover:text-white rounded">XL</button>
+                                <button class="w-10 h-10 flex items-center justify-center border hover:bg-primary hover:text-white rounded">XXL</button>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-medium mb-2">Marques</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-accent">Polo</a></li>
+                                <li><a href="#" class="hover:text-accent">Eagle</a></li>
+                                <li><a href="#" class="hover:text-accent">CK</a></li>
+                                <li><a href="#" class="hover:text-accent">Tommy</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-medium mb-2">Couleurs</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <button class="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow"></button>
+                                <button class="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow"></button>
+                                <button class="w-6 h-6 bg-green-500 rounded-full border-2 border-white shadow"></button>
+                                <button class="w-6 h-6 bg-black rounded-full border-2 border-white shadow"></button>
+                                <button class="w-6 h-6 bg-white rounded-full border-2 border-gray-200 shadow"></button>
+                                <button class="w-6 h-6 bg-yellow-500 rounded-full border-2 border-white shadow"></button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-medium mb-2">Prix</h4>
+                            <div class="mb-2">
+                                <input type="range" min="500" max="5000" step="100" class="w-full">
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>500 HT</span>
+                                <span>5000 HT</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                
+                <!-- Product grid -->
+                <div class="flex-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- Product Card 1 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all scroll-fade">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80" 
+                                     alt="Chemise CK Slim Fit" 
+                                     class="w-full h-64 object-cover">
+                                <div class="absolute top-2 left-2 bg-accent text-white text-xs font-bold px-2 py-1 rounded">
+                                    Nouveau
+                                </div>
+                                <button class="absolute top-2 right-2 bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-red-500">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-medium mb-1">Chemise CK Slim Fit</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500 ml-1">(24)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold">1,500 HT</span>
+                                    <button class="text-sm text-primary hover:text-accent">
+                                        <i class="fas fa-shopping-cart mr-1"></i> Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Card 2 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all scroll-fade">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=776&q=80" 
+                                     alt="Pantalon Tommy Hilfiger" 
+                                     class="w-full h-64 object-cover">
+                                <div class="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                    20%
+                                </div>
+                                <button class="absolute top-2 right-2 bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-red-500">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-medium mb-1">Pantalon Tommy Hilfiger</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500 ml-1">(18)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-gray-400 line-through text-sm mr-2">2,800 HT</span>
+                                        <span class="font-bold">2,240 HT</span>
+                                    </div>
+                                    <button class="text-sm text-primary hover:text-accent">
+                                        <i class="fas fa-shopping-cart mr-1"></i> Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Card 3 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all scroll-fade">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80" 
+                                     alt="T-Shirt Eagle Premium" 
+                                     class="w-full h-64 object-cover">
+                                <div class="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                    Top Ventes
+                                </div>
+                                <button class="absolute top-2 right-2 bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-red-500">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-medium mb-1">T-Shirt Eagle Premium</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500 ml-1">(42)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold">950 HT</span>
+                                    <button class="text-sm text-primary hover:text-accent">
+                                        <i class="fas fa-shopping-cart mr-1"></i> Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product Card 4 -->
+                        <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all scroll-fade">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80" 
+                                     alt="Veste Polo Ralph Lauren" 
+                                     class="w-full h-64 object-cover">
+                                <button class="absolute top-2 right-2 bg-white w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-red-500">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-medium mb-1">Veste Polo Ralph Lauren</h3>
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 text-sm">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500 ml-1">(15)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold">3,500 HT</span>
+                                    <button class="text-sm text-primary hover:text-accent">
+                                        <i class="fas fa-shopping-cart mr-1"></i> Ajouter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="mt-12 flex justify-center scroll-fade">
+                        <nav class="flex items-center space-x-2">
+                            <button class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="w-10 h-10 flex items-center justify-center border rounded bg-primary text-white">1</button>
+                            <button class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white">2</button>
+                            <button class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white">3</button>
+                            <span class="px-2">...</span>
+                            <button class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white">8</button>
+                            <button class="w-10 h-10 flex items-center justify-center border rounded hover:bg-primary hover:text-white">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Collection -->
+    <section class="py-16 bg-secondary">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 scroll-fade">
+                <h2 class="text-3xl font-serif font-bold mb-4">Nouvelle Collection</h2>
+                <p class="max-w-2xl mx-auto">Découvrez nos dernières pièces fraîchement arrivées en stock</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="relative h-96 rounded-lg overflow-hidden clip-polygon scroll-fade">
+                    <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                         alt="Collection Homme" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                        <div class="text-center text-white p-6">
+                            <h3 class="text-2xl font-serif font-bold mb-2">Collection Homme</h3>
+                            <p class="mb-4">Élégance et confort réunis</p>
+                            <button class="bg-accent hover:bg-opacity-90 text-white font-medium py-2 px-6 rounded-full transition-all">
+                                Voir la collection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative h-96 rounded-lg overflow-hidden clip-polygon scroll-fade">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                         alt="Collection Femme" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                        <div class="text-center text-white p-6">
+                            <h3 class="text-2xl font-serif font-bold mb-2">Collection Femme</h3>
+                            <p class="mb-4">Style et sophistication</p>
+                            <button class="bg-accent hover:bg-opacity-90 text-white font-medium py-2 px-6 rounded-full transition-all">
+                                Voir la collection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+
+
+    <!-- Newsletter -->
+    <section class="py-16 bg-primary text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center scroll-fade">
+                <h2 class="text-3xl font-serif font-bold mb-4">Restez connecté avec la fraîcheur</h2>
+                <p class="mb-8 max-w-2xl mx-auto">Promos, nouveautés, tendances… tout dans ta boîte</p>
+                
+                <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto sm:max-w-xl">
+                    <input type="email" placeholder="Votre email" class="flex-1 px-4 py-3 rounded-full text-primary focus:outline-none focus:ring-2 focus:ring-accent">
+                    <button type="submit" class="bg-accent hover:bg-opacity-90 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105">
+                        Je m'abonne
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reassurance -->
+    <section class="py-8 bg-secondary">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="flex items-center justify-center scroll-fade">
+                    <div class="bg-white p-3 rounded-full mr-4">
+                        <i class="fas fa-truck text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Livraison rapide</h4>
+                        <p class="text-sm">Expédition sous 24h</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-center scroll-fade">
+                    <div class="bg-white p-3 rounded-full mr-4">
+                        <i class="fas fa-exchange-alt text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Retours faciles</h4>
+                        <p class="text-sm">30 jours pour changer d'avis</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-center scroll-fade">
+                    <div class="bg-white p-3 rounded-full mr-4">
+                        <i class="fas fa-lock text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Paiement sécurisé</h4>
+                        <p class="text-sm">Cryptage SSL</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-center scroll-fade">
+                    <div class="bg-white p-3 rounded-full mr-4">
+                        <i class="fab fa-whatsapp text-accent text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">Assistance WhatsApp</h4>
+                        <p class="text-sm">7j/7 de 8h à 20h</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="scroll-fade">
+                    <h3 class="text-xl font-serif font-bold mb-4">MJ Fresh Store</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-accent transition">À propos</a></li>
+                        <li><a href="#" class="hover:text-accent transition">FAQ</a></li>
+                        <li><a href="#" class="hover:text-accent transition">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="scroll-fade">
+                    <h3 class="text-xl font-serif font-bold mb-4">Boutique</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-accent transition">Hommes</a></li>
+                        <li><a href="#" class="hover:text-accent transition">Femmes</a></li>
+                        <li><a href="#" class="hover:text-accent transition">Marques</a></li>
+                    </ul>
+                </div>
+                
+                <div class="scroll-fade">
+                    <h3 class="text-xl font-serif font-bold mb-4">Aide</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-accent transition">Politique de retour</a></li>
+                        <li><a href="#" class="hover:text-accent transition">Livraison</a></li>
+                        <li><a href="#" class="hover:text-accent transition">Paiement sécurisé</a></li>
+                    </ul>
+                </div>
+                
+                <div class="scroll-fade">
+                    <h3 class="text-xl font-serif font-bold mb-4">Réseaux sociaux</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-accent transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-accent transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-accent transition">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm mb-2">Suivez-nous pour les dernières nouveautés</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-white border-opacity-20 pt-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-sm text-white text-opacity-70 mb-4 md:mb-0">© 2025 MJ Fresh Store. Tous droits réservés.</p>
+                    
+                  
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-accent text-white w-12 h-12 rounded-full flex items-center justify-center opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+        });
+        
+        // Sticky header on scroll
+        const header = document.querySelector('.sticky-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Scroll animations
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.scroll-fade');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    element.classList.add('active');
+                    
+                    // Add anime.js animations for specific elements
+                    if (element.classList.contains('clip-circle')) {
+                        element.classList.add('clip-circle-animated');
+                    }
+                    
+                    if (element.classList.contains('clip-polygon')) {
+                        element.classList.add('clip-polygon-animated');
+                    }
+                }
+            });
+        }
+        
+        // Initialize animations on load
+        window.addEventListener('load', () => {
+            animateOnScroll();
+            
+            // Hero section animation with anime.js
+            anime({
+                targets: '.clip-circle',
+                duration: 1500,
+                easing: 'easeOutExpo',
+                clipPath: ['circle(0% at 50% 50%)', 'circle(75%)'],
+            });
+        });
+        
+        // Run animations on scroll
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
